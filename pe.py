@@ -20,7 +20,7 @@ client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongod
 db = client.hkstocks
 collection = db.stocks
 count = 0;
-for x in collection.find({ "P/E": { "$lt": pe }}):
+for x in collection.find({ "P/E": { "$lt": pe }}).sort([("P/E", pymongo.ASCENDING)]):
     pp.pprint(str(x['Code'])  + " " + x['Name'] + " P/E: " + str(x['P/E']))
     count = count + 1
 print("Count: ", count)
