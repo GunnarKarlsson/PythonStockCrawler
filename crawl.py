@@ -10,7 +10,7 @@ def save_details(soup, collection):
     try:
         code = int(s[s.find("(")+1 : s.find(")")])
     except:
-        return#e.g. if code == HSI    
+        return#e.g. if code == HSI
     i = s.rfind('(')
     name = s[:i].strip()
     if code < 0 or code > end:
@@ -31,10 +31,14 @@ def save_details(soup, collection):
     for label, value in zip(labels, values):
         k = label
         v = value
+
+        if k == "1m H/L" or k == "3m H/L" or k == "Spread" or k == "Beta" or k == "HSCEI YTD" or k == "Capital Activity" or k == "HSI YTD" or k == "Volatility" or k == "A- Turnover (5d)" or k == "A. Turnover (5d)":
+            continue
+
         if k == "Yield":
             v = v.replace("%","")
             print("Yield: ", v)
-        if k == "Yield" or k == "Board Lot" or k == "P/E" or k == "P/B" or k == "Yield" or k == "EPS" or k == "NAV" or k == "Volatility" or k == "Beta" or k == "YTD" or "HSI YTD":
+        if k == "Yield" or k == "Board Lot" or k == "P/E" or k == "P/B" or k == "Yield" or k == "EPS" or k == "NAV":
             try:
                 v = float(v)
             except:
