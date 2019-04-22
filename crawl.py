@@ -7,28 +7,38 @@ def save_details(soup, collection):
     #name and company code
     s = soup.find_all('span',class_='qtxt_m_blue')
     s = s[0].text.strip()
-    code = s[s.find("(")+1:s.find(")")]
+    try:
+        code = int(s[s.find("(")+1 : s.find(")")])
+    except:
+        return#e.g. if code == HSI    
     i = s.rfind('(')
     name = s[:i].strip()
+    if code < 0 or code > end:
+        return
     dict.update({"Code":code,"Name":name})
     print("Code: ", code)
 
     #Other attributes
     labels = soup.find_all('span',class_='qtxt_s_blue')
-    labels2 = [label.text.strip().replace(".","-") for label in labels]
+    labels = [label.text.strip().replace(".","-") for label in labels]
     try:
-        idxMkt = labels2.index("Mkt Cap")
+        idxMkt = labels.index("Mkt Cap")
     except:
         return
-    labels2 = labels2[idxMkt:]
+    labels = labels[idxMkt:]
     values = soup.find_all('span',class_='qtxt_s_blue_b')
-    values2 = [value.text.strip() for value in values]
-    labels = labels[2:]
-    for label, value in zip(labels2, values2):
+    values = [value.text.strip() for value in values]
+    for label, value in zip(labels, values):
         k = label
         v = value
         if k == "Yield":
+            v = v.replace("%","")
             print("Yield: ", v)
+        if k == "Yield" or k == "Board Lot" or k == "P/E" or k == "P/B" or k == "Yield" or k == "EPS" or k == "NAV" or k == "Volatility" or k == "Beta" or k == "YTD" or "HSI YTD":
+            try:
+                v = float(v)
+            except:
+                pass
         dict.update({k:v})
 
     collection.insert_one(dict)
@@ -40,16 +50,15 @@ import requests
 from bs4 import BeautifulSoup
 import datetime
 import time
-import pprint
+#import pprint
 
-pp = pprint.PrettyPrinter(indent=4)
+#pp = pprint.PrettyPrinter(indent=4)
 
 start = 1
 end = 9999
 client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
 db = client.hkstocks
 collection = db.stocks
-#collection.delete_many({}) #delete all
 
 for stockCode in range(start, end+1):
     url = "http://www.quamnet.com/Quote.action?request_locale=en_US&stockCode={}".format(stockCode)
