@@ -1,13 +1,16 @@
 import pymongo
 import pprint
 import sys
+import argparse
+
+parser = argparse.ArgumentParser(description='Find matches below a certain p/e. Default is 5.0. Example: python pe.py -p 4.0')
+parser.add_argument('-p', type=float,help='Max P/E for matching. Example: python pe.py -p 4.2. Default is 5.0.')
+args = parser.parse_args()
 
 pp = pprint.PrettyPrinter(indent=4)
 
-pe = 5.0
 try:
-    arg = sys.argv[1]
-    pe = float(arg)
+    pe = float(args.p)
 except:
     pe = 5.0
 
