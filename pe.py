@@ -4,20 +4,20 @@ import sys
 
 pp = pprint.PrettyPrinter(indent=4)
 
-lower_than = 0.3
+pe = 5.0
 try:
     arg = sys.argv[1]
-    lower_than = float(arg)
+    pe = float(arg)
 except:
-    lower_than = 0.3
+    pe = 5.0
 
-print("Lower than: ", lower_than)
+print("Matches for P/E lower than: ", pe,":")
 
 client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
 db = client.hkstocks
 collection = db.stocks
 count = 0;
-for x in collection.find({ "P/B": { "$lt": lower_than }}):
-    pp.pprint(str(x['Code'])  + " " + x['Name'] + " P/B: " + str(x['P/B']))
+for x in collection.find({ "P/E": { "$lt": pe }}):
+    pp.pprint(str(x['Code'])  + " " + x['Name'] + " P/E: " + str(x['P/E']))
     count = count + 1
 print("Count: ", count)
