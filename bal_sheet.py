@@ -14,7 +14,7 @@ except:
 
 print("Matches for P/B lower than: ", lower_than,":")
 
-client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
+client = pymongo.MongoClient("mongodb://localhost:27017/hkstocks?retryWrites=true")
 db = client.hkstocks
 collection = db.stocks
 count = 0;
