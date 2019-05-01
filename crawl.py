@@ -16,7 +16,7 @@ def save_details(soup, collection):
     if code < 0 or code > end:
         return
     dict.update({"Code":code,"Name":name})
-    print("Code: ", code)
+    #print("Code: ", code)
 
     #Other attributes
     labels = soup.find_all('span',class_='qtxt_s_blue')
@@ -35,9 +35,12 @@ def save_details(soup, collection):
         if k == "1m H/L" or k == "3m H/L" or k == "Spread" or k == "Beta" or k == "HSCEI YTD" or k == "Capital Activity" or k == "HSI YTD" or k == "Volatility" or k == "A- Turnover (5d)" or k == "A. Turnover (5d)":
             continue
 
+        if k == "Board Lot" or k == "Transactions" or k == "EPS" or k == "YTD" or k == "NAV":
+            continue
+
         if k == "Yield":
             v = v.replace("%","")
-            print("Yield: ", v)
+            #print("Yield: ", v)
         if k == "Yield" or k == "Board Lot" or k == "P/E" or k == "P/B" or k == "Yield" or k == "EPS" or k == "NAV":
             try:
                 v = float(v)
@@ -59,8 +62,9 @@ import time
 #pp = pprint.PrettyPrinter(indent=4)
 
 start = 1
-end = 9999
-client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
+end = 10
+#client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
+client = pymongo.MongoClient("mongodb://localhost:27017/hkstocks?retryWrites=true")
 db = client.hkstocks
 collection = db.stocks
 
