@@ -4,23 +4,31 @@ def save_details(soup, collection):
     t = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
     dict = {}
     dict.update({"time":t})
+
+    q = soup.find_all("body")
     #name and company code
-    s = soup.find_all('span',class_='qtxt_m_blue')
+    s = soup.find_all("span",class_="qtxt_m_blue")
     s = s[0].text.strip()
+    print(s)
     try:
         code = int(s[s.find("(")+1 : s.find(")")])
     except:
         return#e.g. if code == HSI
+    print("C")
+
     i = s.rfind('(')
     name = s[:i].strip()
     if code < 0 or code > end:
         return
     dict.update({"Code":code,"Name":name})
+    print("D")
+
     #print("Code: ", code)
 
     #Other attributes
     labels = soup.find_all('span',class_='qtxt_s_blue')
     labels = [label.text.strip().replace(".","-") for label in labels]
+    print("E")
     try:
         idxMkt = labels.index("Mkt Cap")
     except:
@@ -28,6 +36,7 @@ def save_details(soup, collection):
     labels = labels[idxMkt:]
     values = soup.find_all('span',class_='qtxt_s_blue_b')
     values = [value.text.strip() for value in values]
+    print("F")
     for label, value in zip(labels, values):
         k = label
         v = value
@@ -49,6 +58,7 @@ def save_details(soup, collection):
         dict.update({k:v})
 
     collection.insert_one(dict)
+    print("inserted into collection")
 
 #python -m pip install pymongo
 import pymongo
@@ -62,7 +72,8 @@ import time
 #pp = pprint.PrettyPrinter(indent=4)
 
 start = 1
-end = 9999
+end = 2
+
 #client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
 client = pymongo.MongoClient("mongodb://localhost:27017/hkstocks?retryWrites=true")
 db = client.hkstocks
@@ -70,9 +81,16 @@ collection = db.stocks
 
 for stockCode in range(start, end+1):
     url = "http://www.quamnet.com/Quote.action?request_locale=en_US&stockCode={}".format(stockCode)
-    page = requests.get(url)
+    page = requests.get(
+        url,
+        proxies={
+            "http": "http://bf900c1ca92b40c5ad928549b82eb82b:@proxy.crawlera.com:8010/",
+        },
+    )
     soup = BeautifulSoup(page.content, 'html.parser')
     try:
+        print("starting parse for ", stockCode)
         save_details(soup, collection)
-    except:
+    except Exception as e:
+        print("exception parsing", stockCode, e)
         pass
