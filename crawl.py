@@ -6,9 +6,9 @@ def save_details(soup, collection):
     dict.update({"time":t})
 
     q = soup.find_all("header")
-    print(q)
+    #print(q)
     q = soup.find_all("body")
-    print(q)
+    #print(q)
     #name and company code
     s = soup.find_all("span",class_="qtxt_m_blue")
     s = s[0].text.strip()
