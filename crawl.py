@@ -5,7 +5,10 @@ def save_details(soup, collection):
     dict = {}
     dict.update({"time":t})
 
+    q = soup.find_all("header")
+    print(q)
     q = soup.find_all("body")
+    print(q)
     #name and company code
     s = soup.find_all("span",class_="qtxt_m_blue")
     s = s[0].text.strip()
@@ -72,7 +75,7 @@ import time
 #pp = pprint.PrettyPrinter(indent=4)
 
 start = 1
-end = 2
+end = 100
 
 #client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
 client = pymongo.MongoClient("mongodb://localhost:27017/hkstocks?retryWrites=true")
