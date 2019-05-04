@@ -5,14 +5,12 @@ def save_details(soup, collection):
     dict = {}
     dict.update({"time":t})
 
-    q = soup.find_all("header")
-    #print(q)
-    q = soup.find_all("body")
-    #print(q)
     #name and company code
+    print("A")
     s = soup.find_all("span",class_="qtxt_m_blue")
-
-    s = s[0].text.strip()
+    s = s[0].text.encode("ascii", errors="ignore").decode()
+    s = ''.join(char for char in s if char in printable)
+    s = s.strip()
     print(s)
     try:
         code = int(s[s.find("(")+1 : s.find(")")])
@@ -26,6 +24,8 @@ def save_details(soup, collection):
         return
     dict.update({"Code":code,"Name":name})
     print("D")
+    print(name)
+    print(code)
 
     #print("Code: ", code)
 
@@ -73,6 +73,7 @@ import datetime
 import time
 from random import randint
 import re
+from string import printable
 #import pprint
 
 #pp = pprint.PrettyPrinter(indent=4)
