@@ -70,25 +70,29 @@ import requests
 from bs4 import BeautifulSoup
 import datetime
 import time
+from random import randint
 #import pprint
 
 #pp = pprint.PrettyPrinter(indent=4)
 
 start = 1
-end = 100
+end = 2
 
 #client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
 client = pymongo.MongoClient("mongodb://localhost:27017/hkstocks?retryWrites=true")
 db = client.hkstocks
 collection = db.stocks
 
+USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:38.0) Gecko/20100101 Firefox/38.0"
+headers = {
+    'User-Agent': USER_AGENT
+}
 for stockCode in range(start, end+1):
+    time.sleep(randint(2, 7))
     url = "http://www.quamnet.com/Quote.action?request_locale=en_US&stockCode={}".format(stockCode)
     page = requests.get(
         url,
-        proxies={
-            "http": "http://bf900c1ca92b40c5ad928549b82eb82b:@proxy.crawlera.com:8010/",
-        },
+        headers=headers
     )
     soup = BeautifulSoup(page.content, 'html.parser')
     try:
