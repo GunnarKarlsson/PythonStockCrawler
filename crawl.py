@@ -75,4 +75,4 @@ for stockCode in range(start, end+1):
     try:
         save_details(soup, collection)
     except:
-        pass:
+        pass
