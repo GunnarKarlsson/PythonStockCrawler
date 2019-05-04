@@ -11,6 +11,7 @@ def save_details(soup, collection):
     #print(q)
     #name and company code
     s = soup.find_all("span",class_="qtxt_m_blue")
+
     s = s[0].text.strip()
     print(s)
     try:
@@ -71,6 +72,7 @@ from bs4 import BeautifulSoup
 import datetime
 import time
 from random import randint
+import re
 #import pprint
 
 #pp = pprint.PrettyPrinter(indent=4)
