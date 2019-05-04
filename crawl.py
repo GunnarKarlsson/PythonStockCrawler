@@ -72,4 +72,7 @@ for stockCode in range(start, end+1):
     url = "http://www.quamnet.com/Quote.action?request_locale=en_US&stockCode={}".format(stockCode)
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
-    save_details(soup, collection)
+    try:
+        save_details(soup, collection)
+    except:
+        pass:
