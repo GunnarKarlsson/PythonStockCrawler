@@ -63,7 +63,7 @@ def save_details(soup, collection):
                 value = head
             elif value.endswith("B"):
                 value = value.replace("B","")
-                value = value.replace(".",",")
+                value = value.replace(".","")
                 value = value + "0"
             v = value
 
