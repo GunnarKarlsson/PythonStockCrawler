@@ -65,6 +65,9 @@ def save_details(soup, collection):
                 value = value.replace(".","")
                 value = value.replace(",","")
                 value = value + "0"
+
+            if value == "0.00":
+                value = "0"    
             v = int(value)
 
         dict.update({k:v})
@@ -99,7 +102,7 @@ headers = {
     'User-Agent': USER_AGENT
 }
 for stockCode in range(start, end+1):
-    time.sleep(randint(2, 7))
+    time.sleep(randint(1, 3))
     url = "http://www.quamnet.com/Quote.action?request_locale=en_US&stockCode={}".format(stockCode)
     page = requests.get(
         url,
