@@ -23,7 +23,6 @@ def save_details(soup, collection):
     if code < 0 or code > end:
         return
     dict.update({"Code":code,"Name":name})
-    print("D")
     print(name)
     print(code)
 
@@ -32,7 +31,6 @@ def save_details(soup, collection):
     #Other attributes
     labels = soup.find_all('span',class_='qtxt_s_blue')
     labels = [label.text.strip().replace(".","-") for label in labels]
-    print("E")
     try:
         idxMkt = labels.index("Mkt Cap")
     except:
@@ -40,7 +38,6 @@ def save_details(soup, collection):
     labels = labels[idxMkt:]
     values = soup.find_all('span',class_='qtxt_s_blue_b')
     values = [value.text.strip() for value in values]
-    print("F")
     for label, value in zip(labels, values):
         k = label
         v = value
@@ -59,6 +56,17 @@ def save_details(soup, collection):
                 v = float(v)
             except:
                 pass
+        if k == "Mkt Cap":
+            if value.endswith("M"):
+                value = value.replace("M","")
+                head, point, tail = value.partition('.')
+                value = head
+            elif value.endswith("B"):
+                value = value.replace("B","")
+                value = value.replace(".",",")
+                value = value + "0"
+            v = value
+
         dict.update({k:v})
 
     collection.insert_one(dict)
@@ -78,8 +86,8 @@ from string import printable
 
 #pp = pprint.PrettyPrinter(indent=4)
 
-start = 1
-end = 9999
+start = 129
+end = 131
 
 #client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
 client = pymongo.MongoClient("mongodb://localhost:27017/hkstocks?retryWrites=true")
