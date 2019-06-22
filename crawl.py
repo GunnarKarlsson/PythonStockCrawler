@@ -6,7 +6,6 @@ def save_details(soup, collection):
     dict.update({"time":t})
 
     #name and company code
-    print("A")
     s = soup.find_all("span",class_="qtxt_m_blue")
     s = s[0].text.encode("ascii", errors="ignore").decode()
     s = ''.join(char for char in s if char in printable)
@@ -16,7 +15,6 @@ def save_details(soup, collection):
         code = int(s[s.find("(")+1 : s.find(")")])
     except:
         return#e.g. if code == HSI
-    print("C")
 
     i = s.rfind('(')
     name = s[:i].strip()
