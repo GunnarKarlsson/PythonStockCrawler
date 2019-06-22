@@ -88,8 +88,8 @@ from string import printable
 
 #pp = pprint.PrettyPrinter(indent=4)
 
-start = 100
-end = 140
+start = 1
+end = 9999
 
 #client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
 client = pymongo.MongoClient("mongodb://localhost:27017/hkstocks?retryWrites=true")
