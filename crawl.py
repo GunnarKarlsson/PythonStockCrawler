@@ -7,15 +7,17 @@ def save_details(soup, collection):
 
     #name and company code
     s = soup.find_all("span",class_="qtxt_m_blue")
+    print("A")
     s = s[0].text.encode("ascii", errors="ignore").decode()
     s = ''.join(char for char in s if char in printable)
+    print("B")
     s = s.strip()
     print(s)
     try:
         code = int(s[s.find("(")+1 : s.find(")")])
     except:
         return#e.g. if code == HSI
-
+        print("C")
     i = s.rfind('(')
     name = s[:i].strip()
     if code < 0 or code > end:
@@ -67,11 +69,12 @@ def save_details(soup, collection):
                 value = value + "0"
 
             if value == "0.00":
-                value = "0"    
+                value = "0"
             v = int(value)
 
         dict.update({k:v})
 
+    print("dict",dict)
     collection.insert_one(dict)
     print("inserted into collection")
 
@@ -90,7 +93,7 @@ from string import printable
 #pp = pprint.PrettyPrinter(indent=4)
 
 start = 1
-end = 9999
+end = 2
 
 #client = pymongo.MongoClient("mongodb+srv://user0:asdfasdf@cluster0-813m4.mongodb.net/hkstocks?retryWrites=true")
 client = pymongo.MongoClient("mongodb://localhost:27017/hkstocks?retryWrites=true")
