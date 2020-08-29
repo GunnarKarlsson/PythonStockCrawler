@@ -72,10 +72,22 @@ for line in lines:
         #print("adding line" ,line)
         result.append(line)
         #print(result)    
-
-print("Code, Name, pe, pb, yield, time")
+bar_length = 39
+print "-" * bar_length
+print "QUERY: " + sys.argv[1]
+print "-" * bar_length
+print "%-7s %-15s %7s %7s" % ("CODE", "NAME", "P/E", "P/B")
+print "-" * bar_length
 
 for item in result:
-    print(item)         
-
+    item = item.split(",")
+    code = item[0]
+    name = item[1]
+    pe = item[2]
+    pb = item[3]
+    yld = item[4]
+    print "%-7s %-15s %7s %7s" % (code, name, pe, pb)
+print "-" * bar_length
 print("Results: " + str(len(result)))
+print "-" * bar_length
+   
