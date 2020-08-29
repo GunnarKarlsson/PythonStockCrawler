@@ -1,4 +1,6 @@
-# Hong Kong Stock Stock Ratios Crawler and Query
+# Hong Kong Stock Financial Ratio Crawler
+
+A tool to gather financial ratios for companies listed on the Hong Kong Stock Exchange in a csv file, and query the data
 
 ## Crawler
 
@@ -6,23 +8,27 @@ To crawl, do:
 
 ```$ python crawl.py```
 
-Crawls stock codes 1 to 999, ignoring empty codes. Saves results to csv file called ```stocks.csv```
+Crawls stock codes 1 to 999, ignoring empty codes. 
+
+Saves results to a csv file called ```stocks.csv```
 
 ## Query
 
-Queries ```stocks.csv``` file from command line with basic custom query statements
-
-Supported ratios: 
-* pb (price-to-book)
-* pe (price-to-earning)
-* yield
-
-Supported operators: > and <
+Query ```stocks.csv``` file from command line with basic custom query statements.
 
 Example: 
 ```$ python query.py "select pe < 3 and pe > 1 and pb < 0.2"```
 
-Result:
+Supported ratios: 
+* "pb" (price-to-book)
+* "pe" (price-to-earning)
+* "yield" (dividend yield)
+
+Supported operators: 
+* ">"
+* "<"
+
+Example Result:
 ```
 -----------------------------------------------
 QUERY: select pe < 3 and pe > 1 and pb < 0.2
