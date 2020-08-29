@@ -1,16 +1,16 @@
 import sys
 
-print ('# of arguments:', len(sys.argv), 'arguments.')
-print ('Argument List:', str(sys.argv))
-print(type(sys.argv[1]))
-print(sys.argv[1])
+#print ('# of arguments:', len(sys.argv), 'arguments.')
+#print ('Argument List:', str(sys.argv))
+#print(type(sys.argv[1]))
+#print(sys.argv[1])
 
 q = sys.argv[1].split()
 if q[0] != "select":
     print("Missing select statement")
     exit    
 
-print("q", q)
+#print("q", q)
 conditions =[]
 fields = ["name","pb","pe","yield"]
 
@@ -32,8 +32,8 @@ column_index = { "code":0 ,"name":1, "pe":2, "pb":3, "yield":4, "time":5 }
 
 result = []
 
-print("conditions", conditions)
-print("# conditions", len(conditions))
+#print("conditions", conditions)
+#print("# conditions", len(conditions))
 
 lines = iter(lines)
 next(lines) #skip headerline
@@ -71,9 +71,9 @@ for line in lines:
     if exclude == False:
         #print("adding line" ,line)
         result.append(line)
-        print(result)    
+        #print(result)    
 
-print("---------------------")
+print("Code, Name, pe, pb, yield, time")
 
 for item in result:
     print(item)         
