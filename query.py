@@ -1,9 +1,29 @@
 import sys
 
+def print_result_to_console(result):
+    bar_length = 47
+    print "-" * bar_length
+    print "QUERY: " + sys.argv[1]
+    print "-" * bar_length
+    print "%-7s %-15s %7s %7s %7s" % ("CODE", "NAME", "P/E", "P/B", "YIELD")
+    print "-" * bar_length
+
+    for item in result:
+        item = item.split(",")
+        code = item[0]
+        name = item[1]
+        pe = item[2]
+        pb = item[3]
+        yld = item[4]
+        print "%-7s %-15s %7s %7s %7s" % (code, name, pe, pb, yld)
+    print "-" * bar_length
+    print "Results: " + str(len(result))
+    print "-" * bar_length
+
 def main():
     q = sys.argv[1].split()
     if q[0] != "select":
-        print("Missing select statement")
+        print "Missing select statement"
         exit    
 
     conditions =[]
@@ -41,8 +61,7 @@ def main():
             try:
                 v = float(value.strip())
                 limit = float(condition["limit"].strip())
-            except:
-                print("Cant convert " + str(v) + " to float")  
+            except: 
                 continue
 
             if op is ">":
@@ -56,25 +75,7 @@ def main():
         if exclude == False:
             result.append(line)
     
-    bar_length = 39
-    print "-" * bar_length
-    print "QUERY: " + sys.argv[1]
-    print "-" * bar_length
-    print "%-7s %-15s %7s %7s" % ("CODE", "NAME", "P/E", "P/B")
-    print "-" * bar_length
-
-    for item in result:
-        item = item.split(",")
-        code = item[0]
-        name = item[1]
-        pe = item[2]
-        pb = item[3]
-        yld = item[4]
-        print "%-7s %-15s %7s %7s" % (code, name, pe, pb)
-    print "-" * bar_length
-    print("Results: " + str(len(result)))
-    print "-" * bar_length
+    print_result_to_console(result)
 
 if __name__ == "__main__":
     main()
-   
