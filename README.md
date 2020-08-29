@@ -13,7 +13,7 @@ Supported ratios: pb (price-to-book), pe (price-to-earning), yield
 Supported operators: > and <
 
 Example: 
-```$ python query.py "select pe < 3 and pe > 1 and pb < 0.2"
+```$ python query.py "select pe < 3 and pe > 1 and pb < 0.2"```
 Result:
 ```-----------------------------------------------
 ```QUERY: select pe < 3 and pe > 1 and pb < 0.2
