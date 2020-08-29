@@ -3,8 +3,6 @@ def save_details(page, stockCode):
     #Add logic to skip if certain fields are empty
     ts = time.time()
     t = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-    dict = {}
-    dict.update({"time":t})
 
     #name and company code
     print("company info:", page)
@@ -13,9 +11,14 @@ def save_details(page, stockCode):
     fin_info = company_info[str(stockCode)]['fin_info']
     name = str(quote['short_name_en_us']).replace(",","+")
     name = name.replace(" ","-")
+    
+    if name == "None":
+        print("No name")
+        return
+
     with open('stocks.csv', 'a', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow([stockCode, quote['short_name_en_us'], fin_info['pe'], fin_info['pb']])
+        writer.writerow([stockCode, name, fin_info['pe'], fin_info['pb'], fin_info['yield'], t])
      
 import csv
 import requests
@@ -33,13 +36,13 @@ from string import printable
 #pp = pprint.PrettyPrinter(indent=4)
 
 start = 1
-end = 3
+end = 9999
 
 writer = None
 
 with open('stocks.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    writer.writerow(['code', 'name', 'pe', 'pb'])
+    writer.writerow(['code', 'name', 'pe', 'pb', 'yield', 'time'])
 
 USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:38.0) Gecko/20100101 Firefox/38.0"
 headers = {
