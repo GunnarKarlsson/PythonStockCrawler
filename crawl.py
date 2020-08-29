@@ -10,7 +10,7 @@ def main():
     with open('stocks.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(['code', 'name', 'pe', 'pb', 'yield', 'time'])
-        
+
     start = 1
     end = 9999
     writer = None
@@ -53,12 +53,6 @@ def save_details(page, stockCode, writer):
     with open('stocks.csv', 'a', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerow([stockCode, name, fin_info['pe'], fin_info['pb'], fin_info['yield'], t])
-     
-
-
-
-
-
 
 if __name__ == "__main__":
     main()
