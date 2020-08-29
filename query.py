@@ -20,7 +20,7 @@ while i < len(q):
         condition = {
             "field":q[i],
             "op":q[i+1],
-            "limit":float(q[i+2])
+            "limit":q[i+2]
         }
         conditions.append(condition)
     i += 1    
@@ -33,39 +33,49 @@ column_index = { "code":0 ,"name":1, "pe":2, "pb":3, "yield":4, "time":5 }
 result = []
 
 print("conditions", conditions)
+print("# conditions", len(conditions))
 
 lines = iter(lines)
 next(lines) #skip headerline
 for line in lines:
+    #print("line", line)
     exclude = False
     for condition in conditions:
         field = condition["field"]
         op = condition["op"]
-        limit = condition["limit"]
         field_index = column_index[field]
-        line = str(line).split(",")
-        value = line[field_index]
+        temp_line = str(line).split(",")
+        value = temp_line[field_index]
+           
         try:
-           v = float(value)
+            v = float(value.strip())
+            limit = float(condition["limit"].strip())
         except:
-            print("Cant convert " + value + " to float")  
+            print("Cant convert " + str(v) + " to float")  
             continue
 
         if op is ">":
-           if v <= limit:
-               exclude = True
-               break
-        if op is "<":
-            if v >= limit:
+            #print("eval rule >") 
+            if v <= limit:
                 exclude = True
-                break         
+                #print("exclude True")
+                #break
+            
+        if op is "<":
+            #print("eval rule <") 
+            if v > limit:
+                exclude = True
+                #print("exclude True")
+                #break         
 
     if exclude == False:
+        #print("adding line" ,line)
         result.append(line)
+        print(result)    
 
-print("result count", len(result))
+print("---------------------")
 
-print(result)
 for item in result:
-    print(item[0] + " " + item[1] + " " + item[2] + " " + item[3] + " " + item[4])         
+    print(item)         
 
+print("Results: " + str(len(result)))
