@@ -32,6 +32,8 @@ column_index = { "code":0 ,"name":1, "pe":2, "pb":3, "yield":4, "time":5 }
 
 result = []
 
+print("conditions", conditions)
+
 lines = iter(lines)
 next(lines) #skip headerline
 for line in lines:
@@ -50,13 +52,10 @@ for line in lines:
             continue
 
         if op is ">":
-           print("op is >")
            if v <= limit:
-               print("exclude true")
                exclude = True
                break
         if op is "<":
-            print("op is <")
             if v >= limit:
                 exclude = True
                 break         
@@ -66,5 +65,7 @@ for line in lines:
 
 print("result count", len(result))
 
-#print(result)           
+print(result)
+for item in result:
+    print(item[0] + " " + item[1] + " " + item[2] + " " + item[3] + " " + item[4])         
 
