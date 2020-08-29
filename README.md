@@ -6,9 +6,11 @@ To crawl, do:
 
 ```$ python crawl.py```
 
-Crawls stock codes 1 to 999, ignoring empty codes.
+Crawls stock codes 1 to 999, ignoring empty codes. Saves results to csv file called stocks.csv
 
 ## Query
+
+Queries stocks.csv file from command line with basic custom query statements
 
 Supported ratios: 
 * pb (price-to-book)
