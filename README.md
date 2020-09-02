@@ -1,6 +1,6 @@
-# Hong Kong Stock Financial Ratio Crawler
+# Hong Kong Stock Valuation Ratio Crawler
 
-A tool to gather financial ratios for companies listed on the Hong Kong Stock Exchange in a csv file, and query the data
+A tool to gather valuatiom ratios for companies listed on the Hong Kong Stock Exchange in a csv file, and query the data
 
 ## Crawler
 
@@ -8,7 +8,7 @@ To crawl, do:
 
 ```$ python crawl.py```
 
-Crawls stock codes 1 to 999, ignoring empty codes. 
+Crawls stock codes 1 to 9999. 
 
 Saves results to a csv file called ```stocks.csv```
 
