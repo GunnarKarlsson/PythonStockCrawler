@@ -27,6 +27,7 @@ Supported ratios:
 Supported operators: 
 * ">"
 * "<"
+* "and"
 
 Example Result:
 ```
