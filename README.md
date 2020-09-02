@@ -1,6 +1,6 @@
 # Hong Kong Stock Valuation Ratio Crawler
 
-A tool to gather valuatiom ratios for companies listed on the Hong Kong Stock Exchange in a csv file, and query the data
+A tool to gather valuation ratios for companies listed on the Hong Kong Stock Exchange in a csv file, and query the data
 
 ## Crawler
 
