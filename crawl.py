@@ -1,10 +1,12 @@
 import csv
 import requests
 import json
-import requests
 import datetime
 import time
 from random import randint
+
+# Replace with the quote API endpoint. `{}` is filled with the numeric stock code.
+QUOTE_API_URL = "https://EXAMPLE.com/api/v1/quote/stock_quote_with_fin_info?stock_code[]={}&realtime=false"
 
 def main():
     with open('stocks.csv', 'w', newline='') as csvfile:
@@ -20,7 +22,7 @@ def main():
     }
     for stockCode in range(start, end+1):
         time.sleep(randint(1, 3))
-        url="https://www.quamnet.com/api/v1/quote/stock_quote_with_fin_info?stock_code[]={}&realtime=false".format(stockCode)
+        url = QUOTE_API_URL.format(stockCode)
         print(url)
         response = requests.get(
             url,

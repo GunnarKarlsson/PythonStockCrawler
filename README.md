@@ -1,62 +1,104 @@
-# Hong Kong Stock Valuation Ratio Crawler
+# Stock Valuation Ratio Crawler
 
-A tool to gather valuation ratios for companies listed on the Hong Kong Stock Exchange in a csv file, and query the data
+A small Python toolkit that fetches valuation ratios for listed stocks, writes them to a CSV file, and filters that file from the command line with a simple query language.
 
-## Crawler
+It is two scripts:
 
-To crawl, do:
+- `crawl.py` — walks a numeric stock-code range, calls a quote API, and appends rows to `stocks.csv`
+- `query.py` — reads `stocks.csv` and prints rows that match `select ...` conditions
 
-```$ python crawl.py```
+License: [MIT](LICENSE)
 
-Crawls stock codes 1 to 9999. 
+## Requirements
 
-Saves results to a csv file called ```stocks.csv```
+- Python 3 for `crawl.py` (`print()`, `open(..., newline='')`)
+- Python 2 for `query.py` (print statements without parentheses)
+- `requests` (`pip install requests`) for the crawler
 
-## Query
+Set `QUOTE_API_URL` in `crawl.py` before running. The default is a placeholder:
 
-Query ```stocks.csv``` file from command line with basic custom query statements.
-
-Example: 
-```$ python query.py "select pe < 3 and pe > 1 and pb < 0.2"```
-
-Supported ratios: 
-* "pb" (price-to-book)
-* "pe" (price-to-earning)
-* "yield" (dividend yield)
-
-Supported operators: 
-* ">"
-* "<"
-* "and"
-
-Example Result:
+```text
+https://EXAMPLE.com/api/v1/quote/stock_quote_with_fin_info?stock_code[]={}&realtime=false
 ```
+
+`{}` is replaced with the integer stock code on each request.
+
+## Crawler (`crawl.py`)
+
+```bash
+python crawl.py
+```
+
+### What it does
+
+1. Creates `stocks.csv` with header `code,name,pe,pb,yield,time`.
+2. Iterates stock codes **1 through 9999**.
+3. Sleeps a random **1–3 seconds** between requests (rate limiting).
+4. Sends a GET with a desktop Firefox `User-Agent`.
+5. Parses the JSON body and appends a row if the quote has an English short name.
+
+Codes with no name (`None` after string conversion) are skipped. Parse errors are printed and the loop continues.
+
+### Expected API response
+
+The JSON object is keyed by stock code (as a string). Each entry has `quote` and `fin_info`:
+
+```json
+{
+  "1": {
+    "quote": { "short_name_en_us": "EXAMPLE-CO" },
+    "fin_info": { "pe": 12.3, "pb": 0.8, "yield": 4.1 }
+  }
+}
+```
+
+Fields used:
+
+| Source | Field | CSV column |
+| --- | --- | --- |
+| URL / loop | numeric stock code | `code` |
+| `quote.short_name_en_us` | company short name | `name` (commas → `+`, spaces → `-`) |
+| `fin_info.pe` | price-to-earnings | `pe` |
+| `fin_info.pb` | price-to-book | `pb` |
+| `fin_info.yield` | dividend yield | `yield` |
+| local clock | crawl timestamp | `time` (`YYYY-MM-DD HH:MM:SS`) |
+
+CSV dialect: comma-delimited, `|` as quote character, minimal quoting.
+
+## Query (`query.py`)
+
+```bash
+python query.py "select pe < 3 and pe > 1 and pb < 0.2"
+```
+
+The first argument must start with `select`. After that, the script scans tokens for a field, an operator, and a numeric limit. Multiple conditions are combined with **and** (every condition must pass).
+
+Supported fields: `pe`, `pb`, `yield` (and `name` is recognized but compared as a float, so it is not useful in practice).
+
+Supported operators: `>` and `<`.
+
+### How matching works
+
+- Header row is skipped.
+- Each remaining CSV line is split on commas.
+- For each condition, the cell is parsed as `float`. Non-numeric cells skip that condition (they do not fail the row).
+- Rows that fail any condition are excluded.
+- Matching rows are printed as a fixed-width table: `CODE`, `NAME`, `P/E`, `P/B`, `YIELD`.
+
+Example output:
+
+```text
 -----------------------------------------------
 QUERY: select pe < 3 and pe > 1 and pb < 0.2
 -----------------------------------------------
 CODE    NAME                P/E     P/B   YIELD
 -----------------------------------------------
 70      RICH-GOLDMAN      1.519   0.058       0
-89      TAI-SANG-LAND     2.709   0.148   5.353
-129     ASIA-STANDARD      1.63   0.065       0
-153     CHINA-SAITE       2.311   0.094       0
-191     LAI-SUN-INT'L     1.108   0.137   0.922
-214     ASIA-ORIENT       1.322    0.06       0
-292     ASIA-STD-HOTEL    1.084   0.118       0
-342     NEWOCEAN-ENERGY   1.602   0.128       0
-488     LAI-SUN-DEV       1.014   0.137   1.333
-497     CSI-PROPERTIES    2.017   0.181   2.101
-898     MULTIFIELD-INTL   2.126   0.152   4.815
-1023    SITOY-GROUP       2.731   0.165  11.268
-1155    CENTRON-TELECOM   1.726   0.117       0
-1305    WAI-CHI-HOLD      2.515   0.138       0
-1623    HILONG            1.675   0.081       0
-1668    CHINASOUTHCITY    2.492   0.189   3.704
-1676    SHENGHAI-GROUP    1.536   0.099       0
-2330    CHINA-UPTOWN        1.6   0.186       0
-2907    C-SHENGHAI-OLD    1.739   0.112       0
-8080    NAS-HOLDINGS      1.548   0.158       0
-8243    DAHE-MEDIA        2.234   0.185       0
 -----------------------------------------------
-Results: 21
+Results: 1
 -----------------------------------------------
+```
+
+## Output file
+
+`stocks.csv` is generated by the crawler and is gitignored. Re-run `crawl.py` to rebuild it; it is truncated at the start of each run, then appended to as each stock is parsed.
